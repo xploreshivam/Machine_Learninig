@@ -1,0 +1,49 @@
+{% extends "index.html" %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="glass-card animate-fade-in">
+                <h2 class="text-center mb-4"><i class="fas fa-cloud-sun-rain text-primary me-2"></i>Weather-based Crop
+                    Suggestion</h2>
+                <form action="/predict-weather-crop" method="POST">
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label">Temperature (°C)</label>
+                            <input type="number" step="0.1" class="form-control" name="temperature" required
+                                placeholder="Example: 26">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Humidity (%)</label>
+                            <input type="number" step="0.1" class="form-control" name="humidity" required
+                                placeholder="Example: 80">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Rainfall (mm)</label>
+                            <input type="number" step="0.1" class="form-control" name="rainfall" required
+                                placeholder="Example: 150">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Date (Just for reference)</label>
+                            <input type="date" class="form-control" name="date">
+                        </div>
+                    </div>
+                    <div class="text-center mt-4">
+                        <button type="submit" class="btn btn-custom btn-lg">Suggest Best Crop</button>
+                    </div>
+                </form>
+
+                {% if result %}
+                <div class="alert alert-success mt-4 text-center animate-fade-in" role="alert">
+                    <h4 class="alert-heading">Best Crop to Grow</h4>
+                    <p class="display-6">{{ result }}</p>
+                    <hr>
+                    <p class="mb-0">{{ message }}</p>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

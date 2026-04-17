@@ -1,0 +1,37 @@
+{% extends "index.html" %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="glass-card animate-fade-in">
+                <h2 class="text-center mb-4"><i class="fas fa-bug text-danger me-2"></i>Leaf Disease Detection</h2>
+                <div class="alert alert-warning" role="alert">
+                    <i class="fas fa-info-circle me-2"></i>Upload a clear image of the crop leaf to detect diseases.
+                </div>
+                <form action="/predict-disease" method="POST" enctype="multipart/form-data">
+                    <div class="mb-4 text-center">
+                        <label for="file-upload" class="form-label h5 mb-3">Choose Image</label>
+                        <input class="form-control form-control-lg bg-dark text-white border-secondary" id="file-upload"
+                            type="file" name="image" accept="image/*" required>
+                    </div>
+
+                    <div class="text-center mt-4">
+                        <button type="submit" class="btn btn-custom btn-lg"><i class="fas fa-search me-2"></i>Scan
+                            Leaf</button>
+                    </div>
+                </form>
+
+                {% if result %}
+                <div class="alert alert-danger mt-4 text-center animate-fade-in" role="alert">
+                    <h4 class="alert-heading">Disease Detected</h4>
+                    <p class="display-6">{{ result }}</p>
+                    <hr>
+                    <p class="mb-0">{{ message }}</p>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

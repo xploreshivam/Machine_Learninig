@@ -1,0 +1,173 @@
+:root {
+    --primary-color: #2ecc71;
+    --secondary-color: #27ae60;
+    --accent-color: #f1c40f;
+    --dark-bg: #1e1e1e;
+    --glass-bg: rgba(255, 255, 255, 0.1);
+    --glass-border: rgba(255, 255, 255, 0.2);
+    --text-color: #ecf0f1;
+}
+
+/* Apple/iOS Style Glassmorphism */
+body {
+    background: linear-gradient(135deg, #000000, #1c1c1e, #000000);
+    /* Deep iOS Dark Mode BG */
+    background-size: 400% 400%;
+    animation: gradientBG 20s ease infinite;
+    color: #f5f5f7;
+    /* Apple off-white text */
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    min-height: 100vh;
+    letter-spacing: -0.02em;
+    /* Tighter Apple-like tracking */
+}
+
+@keyframes gradientBG {
+    0% {
+        background-position: 0% 50%;
+    }
+
+    50% {
+        background-position: 100% 50%;
+    }
+
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+.overlay {
+    background: rgba(0, 0, 0, 0.6);
+    min-height: 100vh;
+    width: 100%;
+}
+
+/* 3D Prism Lift Effect */
+.glass-card {
+    background: rgba(30, 30, 30, 0.6);
+    backdrop-filter: blur(40px) saturate(180%);
+    -webkit-backdrop-filter: blur(40px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-top: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 28px;
+    padding: 2.5rem;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    /* Standard shadow */
+    transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+    position: relative;
+    overflow: hidden;
+    z-index: 1;
+}
+
+/* The Glare Effect (Shining Light) */
+.glass-card::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 50%;
+    height: 100%;
+    background: linear-gradient(to right,
+            rgba(255, 255, 255, 0) 0%,
+            rgba(255, 255, 255, 0.1) 50%,
+            rgba(255, 255, 255, 0) 100%);
+    transform: skewX(-25deg);
+    transition: 0.7s;
+    z-index: 2;
+    pointer-events: none;
+}
+
+/* Hover State - The "Lift" */
+.glass-card:hover {
+    transform: translateY(-15px) scale(1.02);
+    /* Clean lift up */
+    border-color: rgba(255, 255, 255, 0.5);
+    background: rgba(40, 40, 40, 0.7);
+    /* 3D Colored Glow Shadow */
+    box-shadow:
+        0 20px 50px rgba(0, 0, 0, 0.6),
+        0 0 30px rgba(0, 113, 227, 0.2);
+    /* Subtle blue glow */
+}
+
+/* Trigger Glare on Hover */
+.glass-card:hover::after {
+    left: 150%;
+    /* Slides across the card */
+    transition: 0.7s ease-in-out;
+}
+
+/* Remove old 3D text transforms */
+.glass-card .feature-icon,
+.glass-card h3,
+.glass-card p,
+.glass-card .btn {
+    transform: none;
+}
+
+.navbar-glass {
+    background: rgba(0, 0, 0, 0.8) !important;
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--glass-border);
+}
+
+.btn-custom {
+    background: #0071e3;
+    /* iOS Blue */
+    border: none;
+    color: white;
+    padding: 12px 30px;
+    border-radius: 99px;
+    /* Pill shape */
+    font-weight: 600;
+    font-size: 1.1rem;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0, 113, 227, 0.4);
+}
+
+.btn-custom:hover {
+    background: #0077ed;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 113, 227, 0.6);
+    color: white;
+}
+
+.feature-icon {
+    font-size: 3rem;
+    margin-bottom: 1.5rem;
+    background: linear-gradient(135deg, #34c759, #30d158);
+    /* iOS Green Gradient */
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-weight: 700;
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.animate-fade-in {
+    animation: fadeIn 0.8s ease-out forwards;
+}
+
+.card-title {
+    color: var(--primary-color);
+}

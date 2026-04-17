@@ -1,0 +1,61 @@
+{% extends "index.html" %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="glass-card animate-fade-in">
+                <h2 class="text-center mb-4"><i class="fas fa-flask text-success me-2"></i>Fertilizer Recommendation
+                </h2>
+                <form action="/predict-fertilizer" method="POST">
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label">Nitrogen (N)</label>
+                            <input type="number" class="form-control" name="nitrogen" required
+                                placeholder="Example: 50">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Phosphorus (P)</label>
+                            <input type="number" class="form-control" name="phosphorus" required
+                                placeholder="Example: 50">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Potassium (K)</label>
+                            <input type="number" class="form-control" name="potassium" required
+                                placeholder="Example: 50">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Crop Type</label>
+                            <select class="form-select" name="crop">
+                                <option value="Barley">Barley</option>
+                                <option value="Cotton">Cotton</option>
+                                <option value="Ground Nuts">Ground Nuts</option>
+                                <option value="Maize">Maize</option>
+                                <option value="Millets">Millets</option>
+                                <option value="Oil seeds">Oil seeds</option>
+                                <option value="Paddy">Paddy / Rice</option>
+                                <option value="Pulses">Pulses</option>
+                                <option value="Sugarcane">Sugarcane</option>
+                                <option value="Tobacco">Tobacco</option>
+                                <option value="Wheat">Wheat</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="text-center mt-4">
+                        <button type="submit" class="btn btn-custom btn-lg">Get Recommendation</button>
+                    </div>
+                </form>
+
+                {% if result %}
+                <div class="alert alert-success mt-4 text-center animate-fade-in" role="alert">
+                    <h4 class="alert-heading">Recommended Fertilizer</h4>
+                    <p class="display-6">{{ result }}</p>
+                    <hr>
+                    <p class="mb-0">{{ message }}</p>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
