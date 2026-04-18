@@ -4,6 +4,6 @@ pandas
 scikit-learn
 matplotlib
 seaborn
-tensorflow
+tensorflow-cpu
 pillow
 gunicorn

@@ -4,6 +4,9 @@ import pandas as pd
 import pickle
 import numpy as np
 import tensorflow as tf
+# Limit TF memory/thread usage for free-tier deployments
+tf.config.threading.set_inter_op_parallelism_threads(1)
+tf.config.threading.set_intra_op_parallelism_threads(1)
 from PIL import Image
 import io
 
@@ -167,8 +170,8 @@ def predict_disease_logic(image_file):
         # Add batch dimension (model expects shape [None, 64, 64, 3])
         img_array = np.expand_dims(img_array, axis=0)
         
-        # Predict
-        predictions = disease_model.predict(img_array)
+        # Predict - using model(inputs) instead of model.predict() avoids memory spikes in TF2 for single images
+        predictions = disease_model(img_array, training=False).numpy()
         class_idx = np.argmax(predictions[0])
         confidence = float(np.max(predictions[0]))
         
