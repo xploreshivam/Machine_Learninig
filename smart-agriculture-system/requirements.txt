@@ -2,8 +2,6 @@ flask
 numpy
 pandas
 scikit-learn
-matplotlib
-seaborn
 tensorflow-cpu
 pillow
 gunicorn
