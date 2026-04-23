@@ -170,41 +170,22 @@ def predict_disease(image_file):
         return "Model Error", "Disease model not loaded on server."
         
     try:
-        # 1. Get model's expected input shape
-        input_details = models['disease_input_details'][0]
-        input_shape = input_details['shape']  # e.g., [1, 224, 224, 3]
-        target_h, target_w = input_shape[1], input_shape[2]
-
-        # 2. Preprocess image
-        img = Image.open(image_file).convert('RGB').resize((target_w, target_h))
-        img_array = np.array(img)
-        
-        # 3. Convert RGB to BGR (Many ML models trained on BGR)
-        img_array = img_array[:, :, ::-1]
-        
-        # 4. Dynamic Normalization based on model's dtype
-        dtype = input_details['dtype']
-        if dtype == np.float32:
-            # Try 0-1 normalization first (standard)
-            img_array = img_array.astype(np.float32) / 255.0
-
-        elif dtype == np.uint8:
-            # Quantized Uint8 models: 0 to 255
-            img_array = img_array.astype(np.uint8)
-        elif dtype == np.int8:
-            # Quantized Int8 models: -128 to 127
-            img_array = (img_array.astype(np.int32) - 128).astype(np.int8)
-            
+        # Preprocess image with exact model requirements (64x64, RGB, Float32)
+        img = Image.open(image_file).convert('RGB').resize((64, 64))
+        img_array = np.array(img, dtype=np.float32) / 255.0
         img_array = np.expand_dims(img_array, axis=0)
         
-        # 4. Inference
+        # Inference
         interpreter = models['disease_interpreter']
-        interpreter.set_tensor(input_details['index'], img_array)
+        input_idx = models['disease_input_details'][0]['index']
+        output_idx = models['disease_output_details'][0]['index']
+        
+        interpreter.set_tensor(input_idx, img_array)
         interpreter.invoke()
         
-        # 5. Process Results
-        output_details = models['disease_output_details'][0]
-        preds = interpreter.get_tensor(output_details['index'])
+        # Process Results
+        preds = interpreter.get_tensor(output_idx)
+
         
         # Dequantize if needed
         if output_details.get('quantization'):
