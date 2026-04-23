@@ -12,32 +12,36 @@
                         <div class="col-md-6">
                             <label class="form-label">Nitrogen (N)</label>
                             <input type="number" class="form-control" name="nitrogen" required
-                                placeholder="Example: 50">
+                                placeholder="Example: 50" value="{{ input_data['nitrogen'] if input_data else '' }}">
+
                         </div>
                         <div class="col-md-6">
                             <label class="form-label">Phosphorus (P)</label>
                             <input type="number" class="form-control" name="phosphorus" required
-                                placeholder="Example: 50">
+                                placeholder="Example: 50" value="{{ input_data['phosphorus'] if input_data else '' }}">
+
                         </div>
                         <div class="col-md-6">
                             <label class="form-label">Potassium (K)</label>
                             <input type="number" class="form-control" name="potassium" required
-                                placeholder="Example: 50">
+                                placeholder="Example: 50" value="{{ input_data['potassium'] if input_data else '' }}">
+
                         </div>
                         <div class="col-md-6">
                             <label class="form-label">Crop Type</label>
                             <select class="form-select" name="crop">
-                                <option value="Barley">Barley</option>
-                                <option value="Cotton">Cotton</option>
-                                <option value="Ground Nuts">Ground Nuts</option>
-                                <option value="Maize">Maize</option>
-                                <option value="Millets">Millets</option>
-                                <option value="Oil seeds">Oil seeds</option>
-                                <option value="Paddy">Paddy / Rice</option>
-                                <option value="Pulses">Pulses</option>
-                                <option value="Sugarcane">Sugarcane</option>
-                                <option value="Tobacco">Tobacco</option>
-                                <option value="Wheat">Wheat</option>
+                                <option value="Barley" {% if input_data and input_data['crop'] == 'Barley' %}selected{% endif %}>Barley</option>
+                                <option value="Cotton" {% if input_data and input_data['crop'] == 'Cotton' %}selected{% endif %}>Cotton</option>
+                                <option value="Ground Nuts" {% if input_data and input_data['crop'] == 'Ground Nuts' %}selected{% endif %}>Ground Nuts</option>
+                                <option value="Maize" {% if input_data and input_data['crop'] == 'Maize' %}selected{% endif %}>Maize</option>
+                                <option value="Millets" {% if input_data and input_data['crop'] == 'Millets' %}selected{% endif %}>Millets</option>
+                                <option value="Oil seeds" {% if input_data and input_data['crop'] == 'Oil seeds' %}selected{% endif %}>Oil seeds</option>
+                                <option value="Paddy" {% if input_data and input_data['crop'] == 'Paddy' %}selected{% endif %}>Paddy / Rice</option>
+                                <option value="Pulses" {% if input_data and input_data['crop'] == 'Pulses' %}selected{% endif %}>Pulses</option>
+                                <option value="Sugarcane" {% if input_data and input_data['crop'] == 'Sugarcane' %}selected{% endif %}>Sugarcane</option>
+                                <option value="Tobacco" {% if input_data and input_data['crop'] == 'Tobacco' %}selected{% endif %}>Tobacco</option>
+                                <option value="Wheat" {% if input_data and input_data['crop'] == 'Wheat' %}selected{% endif %}>Wheat</option>
+
                             </select>
                         </div>
                     </div>

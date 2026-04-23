@@ -1,0 +1,18 @@
+{% extends "index.html" %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="glass-card text-center animate-fade-in">
+                <i class="fas fa-exclamation-triangle display-1 text-danger mb-4"></i>
+                <h1 class="display-4">Error {{ code }}</h1>
+                <p class="lead">{{ message }}</p>
+                <div class="mt-4">
+                    <a href="/" class="btn btn-custom btn-lg">Back to Home</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
