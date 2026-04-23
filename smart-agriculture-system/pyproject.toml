@@ -7,10 +7,7 @@ dependencies = [
     "numpy",
     "pandas",
     "scikit-learn",
-    "tflite-runtime",
+    "tensorflow-cpu",
     "pillow",
     "gunicorn"
 ]
-
-[tool.uv]
-environments = ["sys_platform == 'linux'"]

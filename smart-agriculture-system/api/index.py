@@ -1,5 +1,6 @@
 import os
 from flask import Flask, render_template, request
+import tensorflow as tf
 try:
     from . import utils
 except ImportError:
@@ -8,22 +9,13 @@ except ImportError:
 # Environment setup for TensorFlow
 os.environ['TF_ENABLE_ONEDNN_OPTS'] = '0'
 
-# Import TFLite (handle both standard and runtime versions)
-try:
-    import tflite_runtime.interpreter as tflite
-except ImportError:
-    try:
-        import tensorflow.lite as tflite
-    except ImportError:
-        tflite = None
-
 # Initialize Flask app (paths relative to api/index.py)
 app = Flask(__name__, 
             template_folder='../templates', 
             static_folder='../static')
 
 # Load models on startup
-utils.load_models(tflite)
+utils.load_models(tf)
 
 @app.route('/')
 def home():

@@ -2,6 +2,6 @@ flask
 numpy
 pandas
 scikit-learn
-tflite-runtime
+tensorflow-cpu
 pillow
 gunicorn
