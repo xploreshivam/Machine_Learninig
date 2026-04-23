@@ -114,7 +114,9 @@ def predict_weather_crop():
         t, h, r = request.form['temperature'], request.form['humidity'], request.form['rainfall']
         date_str = request.form.get('date', '')
         date_msg = f" for {date_str}" if date_str else ""
+        res, msg = utils.predict_weather_crop(t, h, r)
         return render_template('weather.html', result=res, message=f"{msg}{date_msg}", input_data=request.form)
+
 
     except Exception as e:
         return render_template('weather.html', result="Error", message="Weather-based suggestion failed. Please try again.", input_data=request.form)

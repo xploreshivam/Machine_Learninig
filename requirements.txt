@@ -1,6 +1,6 @@
 flask
 gunicorn
-numpy
+numpy<2.0.0
 pandas
 Pillow
 tflite-runtime
