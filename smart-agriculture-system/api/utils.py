@@ -167,23 +167,40 @@ def predict_weather_crop(temp, humid, rain):
 
 def predict_disease(image_file):
     if models['disease_interpreter'] is None:
-        return "Model Error", "Disease model not loaded."
+        return "Model Error", "Disease model not loaded on server."
         
     try:
-        # Preprocess image
-        img = Image.open(image_file).convert('RGB').resize((64, 64))
-        img_array = np.array(img) / 255.0
-        img_array = np.expand_dims(img_array, axis=0).astype(np.float32)
+        # 1. Get model's expected input shape
+        input_details = models['disease_input_details'][0]
+        input_shape = input_details['shape']  # e.g., [1, 224, 224, 3]
+        target_h, target_w = input_shape[1], input_shape[2]
+
+        # 2. Preprocess image
+        img = Image.open(image_file).convert('RGB').resize((target_w, target_h))
+        img_array = np.array(img, dtype=np.float32)
         
-        # Inference
+        # Normalize to [-1, 1] - very common for TFLite models
+        img_array = (img_array / 127.5) - 1.0
+        img_array = np.expand_dims(img_array, axis=0)
+        
+        # 3. Inference
         interpreter = models['disease_interpreter']
-        interpreter.set_tensor(models['disease_input_details'][0]['index'], img_array)
+        interpreter.set_tensor(input_details['index'], img_array)
         interpreter.invoke()
         
-        preds = interpreter.get_tensor(models['disease_output_details'][0]['index'])
-        class_idx = np.argmax(preds[0])
-        confidence = float(np.max(preds[0]))
+        # 4. Process Results
+        output_details = models['disease_output_details'][0]
+        preds = interpreter.get_tensor(output_details['index'])
         
+        # Debug Log
+        print(f"DEBUG: Prediction Raw Scores: {preds[0]}")
+        
+        class_idx = np.argmax(preds[0])
+        confidence = float(preds[0][class_idx])
+        
+        if models['disease_classes'] is None:
+            return "Class Error", "Disease names not found."
+            
         result = models['disease_classes'][class_idx]
         
         tips = {
@@ -193,6 +210,16 @@ def predict_disease(image_file):
             "Healthy Crop": "Maintain current care."
         }
         
-        return result, f"{tips.get(result, 'Monitor closely.')} (Confidence: {confidence*100:.1f}%)"
+        # If confidence is too low, be honest with the user
+        if confidence < 0.4:
+            msg = f"Low confidence ({confidence*100:.1f}%). Result might be inaccurate. Please use a clearer photo."
+        else:
+            msg = f"{tips.get(result, 'Monitor closely.')} (Confidence: {confidence*100:.1f}%)"
+            
+        return result, msg
+
+        
     except Exception as e:
-        return "Error", f"Image processing failed: {e}"
+        print(f"Disease Prediction Error: {e}")
+        return "Error", f"Inference failed: {str(e)}"
+

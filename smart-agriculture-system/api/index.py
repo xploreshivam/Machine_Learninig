@@ -95,13 +95,19 @@ def disease():
 @app.route('/predict-disease', methods=['POST'])
 def predict_disease():
     try:
-        if 'image' not in request.files or request.files['image'].filename == '':
-            return render_template('disease.html', result="Error", message="No image selected")
+        if 'image' not in request.files:
+            return render_template('disease.html', result=None, message="No image part in request")
+            
+        file = request.files['image']
+        if file.filename == '':
+            return render_template('disease.html', result=None, message="No image selected. Please choose a file.")
         
-        res, msg = utils.predict_disease(request.files['image'])
+        res, msg = utils.predict_disease(file)
         return render_template('disease.html', result=res, message=msg)
     except Exception as e:
-        return render_template('disease.html', result="Error", message=str(e))
+        print(f"Disease Route Error: {e}")
+        return render_template('disease.html', result="Error", message="An unexpected error occurred during scan.")
+
 
 # --- 5. Weather Crop Module ---
 @app.route('/weather')
