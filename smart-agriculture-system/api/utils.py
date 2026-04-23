@@ -39,9 +39,9 @@ def load_models(tflite_module):
         # 4. Weather Model
         models['weather'] = pickle.load(open(os.path.join(MODELS_DIR, 'weather_crop_model.pkl'), 'rb'))
         
-        # 5. Disease Model (TFLite via full TensorFlow)
-        if tf_module:
-            interpreter = tf_module.lite.Interpreter(model_path=os.path.join(MODELS_DIR, 'disease_model.tflite'))
+        # 5. Disease Model (TFLite)
+        if tflite_module:
+            interpreter = tflite_module.Interpreter(model_path=os.path.join(MODELS_DIR, 'disease_model.tflite'))
             interpreter.allocate_tensors()
             models['disease_interpreter'] = interpreter
             models['disease_input_details'] = interpreter.get_input_details()
