@@ -177,31 +177,62 @@ def predict_disease(image_file):
 
         # 2. Preprocess image
         img = Image.open(image_file).convert('RGB').resize((target_w, target_h))
-        img_array = np.array(img, dtype=np.float32)
+        img_array = np.array(img)
         
-        # Normalize to [-1, 1] - very common for TFLite models
-        img_array = (img_array / 127.5) - 1.0
+        # 3. Convert RGB to BGR (Many ML models trained on BGR)
+        img_array = img_array[:, :, ::-1]
+        
+        # 4. Dynamic Normalization based on model's dtype
+        dtype = input_details['dtype']
+        if dtype == np.float32:
+            # Try 0-1 normalization first (standard)
+            img_array = img_array.astype(np.float32) / 255.0
+
+        elif dtype == np.uint8:
+            # Quantized Uint8 models: 0 to 255
+            img_array = img_array.astype(np.uint8)
+        elif dtype == np.int8:
+            # Quantized Int8 models: -128 to 127
+            img_array = (img_array.astype(np.int32) - 128).astype(np.int8)
+            
         img_array = np.expand_dims(img_array, axis=0)
         
-        # 3. Inference
+        # 4. Inference
         interpreter = models['disease_interpreter']
         interpreter.set_tensor(input_details['index'], img_array)
         interpreter.invoke()
         
-        # 4. Process Results
+        # 5. Process Results
         output_details = models['disease_output_details'][0]
         preds = interpreter.get_tensor(output_details['index'])
         
-        # Debug Log
-        print(f"DEBUG: Prediction Raw Scores: {preds[0]}")
+        # Dequantize if needed
+        if output_details.get('quantization'):
+            scale, zero_point = output_details['quantization']
+            if scale > 0:
+                preds = scale * (preds.astype(np.float32) - zero_point)
+
+        # DEEP DIAGNOSTIC LOGGING
+        print(f"--- DISEASE DIAGNOSTIC ---")
+        print(f"Input Shape: {input_shape}")
+        print(f"Output Raw: {preds[0]}")
         
         class_idx = np.argmax(preds[0])
         confidence = float(preds[0][class_idx])
         
-        if models['disease_classes'] is None:
-            return "Class Error", "Disease names not found."
+        classes = models['disease_classes']
+        print(f"Available Classes: {classes}")
+        print(f"Predicted Index: {class_idx} (Confidence: {confidence})")
+        
+        if classes is None or not isinstance(classes, (list, np.ndarray)):
+            return "Configuration Error", "Disease classes not loaded correctly."
             
-        result = models['disease_classes'][class_idx]
+        if class_idx >= len(classes):
+            return "Index Error", f"Model predicted class {class_idx} but only {len(classes)} names found."
+            
+        result = classes[class_idx]
+        print(f"Final Result: {result}")
+        print(f"--------------------------")
         
         tips = {
             "Apple Scab": "Use fungicide and prune branches.",
@@ -210,13 +241,13 @@ def predict_disease(image_file):
             "Healthy Crop": "Maintain current care."
         }
         
-        # If confidence is too low, be honest with the user
-        if confidence < 0.4:
-            msg = f"Low confidence ({confidence*100:.1f}%). Result might be inaccurate. Please use a clearer photo."
+        if confidence < 0.35:
+            msg = f"Low confidence ({confidence*100:.1f}%). Model is unsure. ({result})"
         else:
             msg = f"{tips.get(result, 'Monitor closely.')} (Confidence: {confidence*100:.1f}%)"
             
         return result, msg
+
 
         
     except Exception as e:
