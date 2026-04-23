@@ -1,3 +1,4 @@
+
 {
   "version": 2,
   "builds": [
@@ -6,6 +7,9 @@
       "use": "@vercel/python"
     }
   ],
+  "env": {
+    "TF_ENABLE_ONEDNN_OPTS": "0"
+  },
   "routes": [
     {
       "src": "/(.*)",
