@@ -6,7 +6,6 @@ __pycache__/
 **/*.pyc
 .git/
 datasets/
-models/disease_keras_model.keras
 startup_log.txt
 .python-version
 .vercel/
