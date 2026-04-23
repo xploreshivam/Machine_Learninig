@@ -184,13 +184,14 @@ def predict_disease(image_file):
         interpreter.invoke()
         
         # Process Results
-        preds = interpreter.get_tensor(output_idx)
+        output_details = models['disease_output_details'][0]
+        preds = interpreter.get_tensor(output_details['index'])
 
-        
         # Dequantize if needed
         if output_details.get('quantization'):
             scale, zero_point = output_details['quantization']
             if scale > 0:
+
                 preds = scale * (preds.astype(np.float32) - zero_point)
 
         # DEEP DIAGNOSTIC LOGGING
