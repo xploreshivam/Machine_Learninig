@@ -2,6 +2,6 @@
 builder = "nixpacks"
 
 [deploy]
-startCommand = "gunicorn --bind 0.0.0.0:$PORT --chdir smart-agriculture-system api.index:app"
+startCommand = "gunicorn --chdir smart-agriculture-system api.index:app"
 healthCheckPath = "/"
 healthCheckTimeout = 100

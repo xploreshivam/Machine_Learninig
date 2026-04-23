@@ -4,4 +4,5 @@ __pycache__/
 *.pyc
 .git/
 train_*.py
-Procfile
+# Procfile removed from ignore
+
