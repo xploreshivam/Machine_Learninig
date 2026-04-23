@@ -1,19 +1,12 @@
-
 {
   "version": 2,
-  "builds": [
-    {
-      "src": "app/app.py",
-      "use": "@vercel/python"
-    }
-  ],
   "env": {
     "TF_ENABLE_ONEDNN_OPTS": "0"
   },
-  "routes": [
+  "rewrites": [
     {
-      "src": "/(.*)",
-      "dest": "app/app.py"
+      "source": "/(.*)",
+      "destination": "/app.py"
     }
   ]
 }

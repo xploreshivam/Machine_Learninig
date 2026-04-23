@@ -1,6 +1,6 @@
 import os
 from flask import Flask, render_template, request
-import app.utils as utils
+import utils
 
 # Environment setup for TensorFlow
 os.environ['TF_ENABLE_ONEDNN_OPTS'] = '0'
