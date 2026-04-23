@@ -7,11 +7,11 @@ venv/
 env/
 .env
 
-# Railway
+# Deployment Files
 !Procfile
 !runtime.txt
 !requirements.txt
-!railway.toml
+
 
 # IDEs
 .vscode/

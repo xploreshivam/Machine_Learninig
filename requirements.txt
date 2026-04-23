@@ -1,7 +1,8 @@
 flask
+gunicorn
 numpy
 pandas
-scikit-learn
+Pillow
 tflite-runtime
-pillow
-gunicorn
+scikit-learn
+scipy

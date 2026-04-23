@@ -1,7 +1,0 @@
-[build]
-builder = "nixpacks"
-
-[deploy]
-startCommand = "gunicorn --chdir smart-agriculture-system api.index:app"
-healthCheckPath = "/"
-healthCheckTimeout = 100
