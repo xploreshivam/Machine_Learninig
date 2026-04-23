@@ -1,6 +1,9 @@
 import os
 from flask import Flask, render_template, request
-import utils
+try:
+    from . import utils
+except ImportError:
+    import utils
 
 # Environment setup for TensorFlow
 os.environ['TF_ENABLE_ONEDNN_OPTS'] = '0'
@@ -14,8 +17,10 @@ except ImportError:
     except ImportError:
         tflite = None
 
-# Initialize Flask app
-app = Flask(__name__)
+# Initialize Flask app (paths relative to api/index.py)
+app = Flask(__name__, 
+            template_folder='../templates', 
+            static_folder='../static')
 
 # Load models on startup
 utils.load_models(tflite)
