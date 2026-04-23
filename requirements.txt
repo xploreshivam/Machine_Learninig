@@ -1,0 +1,7 @@
+flask
+numpy
+pandas
+scikit-learn
+tflite-runtime
+pillow
+gunicorn
