@@ -1,8 +1,0 @@
-venv/
-datasets/
-__pycache__/
-*.pyc
-.git/
-train_*.py
-# Procfile removed from ignore
-
